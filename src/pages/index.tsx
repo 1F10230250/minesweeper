@@ -1,4 +1,3 @@
-import { posix } from 'path';
 import styles from './index.module.css';
 import { useState } from 'react';
 const Home = () => {
