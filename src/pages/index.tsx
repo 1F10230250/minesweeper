@@ -1,3 +1,4 @@
+import { posix } from 'path';
 import styles from './index.module.css';
 import { useState } from 'react';
 const Home = () => {
@@ -40,7 +41,7 @@ const Home = () => {
   );
   const board: number[][] = [];
 
-  const number = 2;
+  const number = 3;
 
   return (
     <div className={styles.container}>
