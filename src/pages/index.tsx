@@ -32,7 +32,7 @@ const Home = () => {
   );
   const board:number[][]=[];
   
-const number = 3
+const number = 2
 
   return (
     <div className={styles.container}>
