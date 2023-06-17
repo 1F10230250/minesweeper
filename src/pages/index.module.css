@@ -22,3 +22,17 @@
   justify-content: center;
   padding: 5rem 0;
 }
+
+.board {
+  display: flex;
+  flex-wrap: wrap;
+  height: 640px;
+  width: 640px;
+  background-color: gray;
+}
+
+.cell {
+  height: 80px;
+  width: 80px;
+  border: 1px solid black;
+}

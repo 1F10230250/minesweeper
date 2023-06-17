@@ -45,6 +45,8 @@ const Home = () => {
 
   return (
     <div className={styles.container}>
+      <div className={styles.board}>
+      </div>
       <main className={styles.main}>
         <div className={styles.hoge} style={{ backgroundPosition: 30 * (1 - number) }} />
       </main>
