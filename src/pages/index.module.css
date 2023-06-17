@@ -13,3 +13,12 @@
   height: 30px;
   background: url('~/assets/images/icons.png') no-repeat;
 }
+
+.main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 0;
+}
