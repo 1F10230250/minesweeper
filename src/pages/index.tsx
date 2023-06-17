@@ -1,3 +1,4 @@
+import { posix } from 'path';
 import styles from './index.module.css';
 import { useState } from 'react';
 const Home = () => {
@@ -30,10 +31,16 @@ const Home = () => {
     row.some((input,x)=>input===1&&bombMap[y][x]===1) 
   );
   const board:number[][]=[];
+  
+const number = 3
+
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <div className={styles.hoge} />
+      <div 
+          className={styles.hoge}
+          style={{backgroundPosition:30*(1-number)}}
+        />
       </main>
     </div>
   );
