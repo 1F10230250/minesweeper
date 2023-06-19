@@ -24,7 +24,7 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
-  const bombCount = 10;
+  // const bombCount = 10;
   const [bombMap, setbombMap] = useState([
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -61,8 +61,6 @@ const Home = () => {
       }
       setUserInputs(newUserInputs);
     }
-
-  const number = 3;
 
   return (
     <div className={styles.container}>
