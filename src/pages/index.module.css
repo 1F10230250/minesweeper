@@ -9,6 +9,7 @@
 }
 
 .hoge {
+  border: 1px solid black;
   width: 30px;
   height: 30px;
   background: url('~/assets/images/icons.png') no-repeat;
@@ -26,13 +27,13 @@
 .board {
   display: flex;
   flex-wrap: wrap;
-  height: 640px;
-  width: 640px;
+  height: 270px;
+  width: 270px;
   background-color: gray;
 }
 
 .cell {
-  height: 80px;
-  width: 80px;
+  height: 30px;
+  width: 30px;
   border: 1px solid black;
 }
