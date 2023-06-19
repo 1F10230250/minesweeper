@@ -2,6 +2,7 @@ import { posix } from 'path';
 import styles from './index.module.css';
 import { useState } from 'react';
 import { json } from 'stream/consumers';
+import { ok } from 'assert';
 const Home = () => {
   const directions = [
     [-1, 0],
@@ -43,7 +44,7 @@ const Home = () => {
   );
   const board: number[][] = [];
   board.push(
-    [0,0,0,0,0,0,0,0,0],
+    [1,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0],
@@ -57,10 +58,12 @@ const Home = () => {
       console.log(x, y);
       const newUserInputs:(0 | 1 | 2 | 3)[][]= JSON.parse(JSON.stringify(userInputs));
       if (userInputs[y][x]===0){
-        userInputs[y][x]=1
+        userInputs[y][x]=1 ,
+        console.log("okkkkkk")
       }
       setUserInputs(newUserInputs);
     }
+
 
   return (
     <div className={styles.container}>
