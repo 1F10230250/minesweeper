@@ -13,6 +13,10 @@
   width: 30px;
   height: 30px;
   background: url('~/assets/images/icons.png') no-repeat;
+  border-top: 5px solid white ;
+  border-left: 5px solid white;
+  border-right: 5px solid  #404040;
+  border-bottom: 5px solid #404040;
 }
 
 .main {
@@ -29,11 +33,14 @@
   flex-wrap: wrap;
   height: 270px;
   width: 270px;
-  background-color: gray;
+  background-color: #808080;
 }
 
 .cell {
   height: 30px;
   width: 30px;
-  border: 1px solid black;
+  border-top: 70px solid white ;
+  border-left: 70px solid white;
+  border-right: 70px solid  #404040;
+  border-bottom: 70px solid #404040;
 }
