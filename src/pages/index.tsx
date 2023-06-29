@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import styles from './index.module.css';
 const Home = () => {
-  const directions = [
-    [-1, 0],
-    [-1, -1],
-    [0, -1],
-    [1, -1],
-    [1, 0],
-    [1, 1],
-    [0, 1],
-    [-1, 1],
-  ];
+  // const directions = [
+  //   [-1, 0],
+  //   [-1, -1],
+  //   [0, -1],
+  //   [1, -1],
+  //   [1, 0],
+  //   [1, 1],
+  //   [0, 1],
+  //   [-1, 1],
+  // ];
   const [userInputs, setUserInputs] = useState<(0 | 1 | 2 | 3)[][]>([
-    [1, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -25,7 +25,7 @@ const Home = () => {
   // const bombCount = 10;
   //0->ボム無し
   //1->ボム有り
-  const [bombMap, setbombMap] = useState([
+  const [bombMap, setBombMap] = useState([
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -64,38 +64,60 @@ const Home = () => {
     console.log(x, y);
     const newUserInputs: (0 | 1 | 2 | 3)[][] = JSON.parse(JSON.stringify(userInputs));
     if (userInputs[y][x] === 0) {
-      (userInputs[y][x] = 1), console.log('okkkkkk');
+      newUserInputs[y][x] = 1;
     }
     setUserInputs(newUserInputs);
   };
+  console.log(userInputs);
+  console.log(bombMap);
+  console.log(board);
+  // for (let yb = 0; yb <= 8; yb += 1) {
+  //   for (let xb = 0; xb <= 8; xb += 1) {
+  //     if (bombMap[yb][xb] === 1) {
+  //       bomb_number += 1;
+  //     }
+  //   }
+  // }
+  // const bombNumber = 0;
+  // const newBombMap: number[][] = JSON.parse(JSON.stringify(bombMap));
   let bomb_number = 0;
+  let count = 0;
   for (let yb = 0; yb <= 8; yb += 1) {
     for (let xb = 0; xb <= 8; xb += 1) {
       if (bombMap[yb][xb] === 1) {
-        bomb_number += 1;
+        count += 1;
       }
     }
   }
-  let bombNumber = 0;
-  if (isPlaying === true) {
+  if (count === 0) {
     while (bomb_number < 10) {
       const random_y = Math.floor(Math.random() * 9);
       const random_x = Math.floor(Math.random() * 9);
-      if (userInputs[random_y][random_x] === 0) {
+      if (userInputs[random_y][random_x] === 0 && bombMap[random_y][random_x] === 0) {
         bombMap[random_y][random_x] = 1;
-        for (let yb = 0; yb <= 8; yb += 1) {
-          for (let xb = 0; xb <= 8; xb += 1) {
-            if (bombMap[yb][xb] === 1) {
-              bomb_number += 1;
-            }
-          }
-        }
+        bomb_number += 1;
+        // for (let yb = 0; yb <= 8; yb += 1) {
+        //   for (let xb = 0; xb <= 8; xb += 1) {
+        //     if (bombMap[yb][xb] === 1) {
+        //       bomb_number += 1;
+        //     }
+        //   }
+        // }
       }
     }
+    // setBombMap(newBombMap);
   }
-
+  // const bombNumber = 0;
+  // for (let yaa = 0; yaa <= 8; yaa += 1) {
+  //   for (let xaa = 0; xaa <= 8; xaa += 1) {
+  //     if (userInputs[yaa][xaa] === 1 && bombMap[yaa][xaa] === 1) {
+  //       board[yaa][xaa] = 11;
+  //     }
+  //   }
+  // }
   for (let yaa = 0; yaa <= 8; yaa += 1) {
     for (let xaa = 0; xaa <= 8; xaa += 1) {
+      let bombNumber = 0;
       if (userInputs[yaa][xaa] === 1) {
         if (bombMap[yaa][xaa] === 1) {
           for (let y_aa = 0; y_aa <= 8; y_aa += 1) {
@@ -105,41 +127,26 @@ const Home = () => {
               }
             }
           }
-        }
-        if (bombMap[yaa][xaa] !== 1) {
+        } else {
           for (let y_a = -1; y_a <= 1; y_a += 1) {
             for (let x_a = -1; x_a <= 1; x_a += 1) {
-              if (bombMap[yaa + y_a][xaa + x_a] === 1) {
-                bombNumber += 1;
-              }
-              if (bombNumber === 0) {
-                board[yaa][xaa] = 0;
-              }
-              if (bombNumber === 1) {
-                board[yaa][xaa] = 1;
-              }
-              if (bombNumber === 2) {
-                board[yaa][xaa] = 2;
-              }
-              if (bombNumber === 3) {
-                board[yaa][xaa] = 3;
-              }
-              if (bombNumber === 4) {
-                board[yaa][xaa] = 4;
-              }
-              if (bombNumber === 5) {
-                board[yaa][xaa] = 5;
-              }
-              if (bombNumber === 6) {
-                board[yaa][xaa] = 6;
-              }
-              if (bombNumber === 7) {
-                board[yaa][xaa] = 7;
-              }
-              if (bombNumber === 8) {
-                board[yaa][xaa] = 8;
+              if (
+                yaa + y_a >= 0 &&
+                yaa + y_a < bombMap.length &&
+                xaa + x_a >= 0 &&
+                xaa + x_a < bombMap[yaa + y_a].length
+              ) {
+                if (bombMap[yaa + y_a][xaa + x_a] === 1) {
+                  bombNumber += 1;
+                }
               }
             }
+          }
+
+          if (bombNumber === 0) {
+            board[yaa][xaa] = 0;
+          } else {
+            board[yaa][xaa] = bombNumber;
           }
         }
       }
