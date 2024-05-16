@@ -158,14 +158,24 @@ const Home = () => {
       <div className={styles.board}>
         {board.map((row, y) =>
           row.map((color, x) => (
-            <div
-              className={styles.hoge}
-              key={`${x}-${y}`}
-              onClick={() => clickcell(x, y)}
-              style={{
-                backgroundPosition: 30 * (1 - board[y][x]),
-              }}
-            />
+            <>
+              {board[y][x] === -1 ? (
+                <div
+                  className={styles.cell}
+                  key={`cell-${x}-${y}`}
+                  onClick={() => clickcell(x, y)}
+                />
+              ) : (
+                <div
+                  className={styles.hoge}
+                  key={`hoge-${x}-${y}`}
+                  onClick={() => clickcell(x, y)}
+                  style={{
+                    backgroundPosition: 30 * (1 - board[y][x]),
+                  }}
+                />
+              )}
+            </>
           ))
         )}
       </div>
