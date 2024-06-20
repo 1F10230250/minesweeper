@@ -60,17 +60,57 @@ const Home = () => {
     [-1, -1, -1, -1, -1, -1, -1, -1, -1],
     [-1, -1, -1, -1, -1, -1, -1, -1, -1]
   );
+  const newUserInputs: (0 | 1 | 2 | 3)[][] = JSON.parse(JSON.stringify(userInputs));
+  const chain = (y: number, x: number) => {
+    for (let y_i = -1; y_i <= 1; y_i++) {
+      for (let x_i = -1; x_i <= 1; x_i++) {
+        const newY = y + y_i;
+        const newX = x + x_i;
+        if (newY >= 0 && newY <= 8 && newX >= 0 && newX <= 8 && y_i * x_i === 0) {
+          if (userInputs[newY][newX] === 0) {
+            newUserInputs[newY][newX] = 1;
+            setUserInputs(newUserInputs);
+            if (board[newY][newX] === 0) {
+              chain(newX, newY);
+            }
+          }
+        }
+      }
+    }
+  };
   const clickcell = (x: number, y: number) => {
-    console.log(x, y);
     const newUserInputs: (0 | 1 | 2 | 3)[][] = JSON.parse(JSON.stringify(userInputs));
     if (userInputs[y][x] === 0) {
       newUserInputs[y][x] = 1;
     }
     setUserInputs(newUserInputs);
+    console.log(userInputs, '1回目');
+    console.log(y, x);
+    let bomb_number = 0;
+    let count = 0;
+    for (let yb = 0; yb <= 8; yb += 1) {
+      for (let xb = 0; xb <= 8; xb += 1) {
+        if (bombMap[yb][xb] === 1) {
+          count += 1;
+        }
+      }
+    }
+    if (count === 0) {
+      console.log('ボム作成！');
+      console.log('ボムuserInputs', newUserInputs);
+      const newBombMap: number[][] = JSON.parse(JSON.stringify(bombMap));
+      while (bomb_number < 10) {
+        const random_y = Math.floor(Math.random() * 9);
+        const random_x = Math.floor(Math.random() * 9);
+        if (newUserInputs[random_y][random_x] === 0 && bombMap[random_y][random_x] === 0) {
+          newBombMap[random_y][random_x] = 1;
+          bomb_number += 1;
+        }
+        setBombMap(newBombMap);
+      }
+      console.log('bomb_number', bomb_number);
+    }
   };
-  console.log(userInputs);
-  console.log(bombMap);
-  console.log(board);
   // for (let yb = 0; yb <= 8; yb += 1) {
   //   for (let xb = 0; xb <= 8; xb += 1) {
   //     if (bombMap[yb][xb] === 1) {
@@ -79,34 +119,6 @@ const Home = () => {
   //   }
   // }
   // const bombNumber = 0;
-  // const newBombMap: number[][] = JSON.parse(JSON.stringify(bombMap));
-  let bomb_number = 0;
-  let count = 0;
-  for (let yb = 0; yb <= 8; yb += 1) {
-    for (let xb = 0; xb <= 8; xb += 1) {
-      if (bombMap[yb][xb] === 1) {
-        count += 1;
-      }
-    }
-  }
-  if (count === 0) {
-    while (bomb_number < 10) {
-      const random_y = Math.floor(Math.random() * 9);
-      const random_x = Math.floor(Math.random() * 9);
-      if (userInputs[random_y][random_x] === 0 && bombMap[random_y][random_x] === 0) {
-        bombMap[random_y][random_x] = 1;
-        bomb_number += 1;
-        // for (let yb = 0; yb <= 8; yb += 1) {
-        //   for (let xb = 0; xb <= 8; xb += 1) {
-        //     if (bombMap[yb][xb] === 1) {
-        //       bomb_number += 1;
-        //     }
-        //   }
-        // }
-      }
-    }
-    // setBombMap(newBombMap);
-  }
   // const bombNumber = 0;
   // for (let yaa = 0; yaa <= 8; yaa += 1) {
   //   for (let xaa = 0; xaa <= 8; xaa += 1) {
@@ -142,7 +154,6 @@ const Home = () => {
               }
             }
           }
-
           if (bombNumber === 0) {
             board[yaa][xaa] = 0;
           } else {
@@ -150,8 +161,16 @@ const Home = () => {
           }
         }
       }
+      // 空白連鎖
+      if (userInputs[yaa][xaa] === 1 && board[yaa][xaa] === 0) {
+        console.log('ok');
+        chain(yaa, xaa);
+      }
     }
   }
+  console.log('最後userInput', userInputs);
+  console.log('最後board', board);
+  console.log('最後bombMap', bombMap);
 
   return (
     <div className={styles.container}>
