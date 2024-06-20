@@ -16,6 +16,14 @@
   background: url('~/assets/images/icons.png') no-repeat;
 }
 
+.reset-button {
+  margin-bottom: 10px;
+  padding: 15px;
+  font-size: 16px;
+  background: url('~/assets/images/icons.png') no-repeat;
+  cursor: pointer;
+}
+
 .main {
   display: flex;
   flex: 1;
