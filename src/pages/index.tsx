@@ -11,6 +11,10 @@ const Home = () => {
   //   [0, 1],
   //   [-1, 1],
   // ];
+  //0 なし
+  //1 左クリック
+  //2 旗
+  //3 はてな
   const [userInputs, setUserInputs] = useState<(0 | 1 | 2 | 3)[][]>([
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -208,19 +212,50 @@ const Home = () => {
     allBomb = true;
   }
 
+  const handleRightClick = (x: number, y: number, event: React.MouseEvent) => {
+    event.preventDefault();
+    const newUserInputs: (0 | 1 | 2 | 3)[][] = JSON.parse(JSON.stringify(userInputs));
+    if (userInputs[y][x] === 0) {
+      newUserInputs[y][x] = 2;
+    }
+    if (userInputs[y][x] === 2) {
+      newUserInputs[y][x] = 3;
+    }
+    if (userInputs[y][x] === 3) {
+      newUserInputs[y][x] = 0;
+    }
+    setUserInputs(newUserInputs);
+  };
+
+  for (let x = 0; x < 9; x++) {
+    for (let y = 0; y < 9; y++) {
+      if (userInputs[y][x] === 2) {
+        board[y][x] = 9;
+      } else if (userInputs[y][x] === 3) {
+        board[y][x] = 10;
+      } else if (userInputs[y][x] === 0) {
+        board[y][x] = -1;
+      }
+    }
+  }
+
   console.log('最後userInput', userInputs);
   console.log('最後board', board);
   console.log('最後bombMap', bombMap);
 
   return (
     <div className={styles.container}>
-      <button
-        className={styles['reset-button']}
-        onClick={resetGame}
-        style={{
-          backgroundPosition: allBomb === true ? -360 : -330,
-        }}
-      />
+      <div className={styles.option}>
+        <div className={styles.bomb}>aaa</div>
+        <button
+          className={styles['reset-button']}
+          onClick={resetGame}
+          style={{
+            backgroundPosition: allBomb === true ? -360 : -330,
+          }}
+        />
+        <div className={styles.timer}>aaa</div>
+      </div>
       <div className={styles.board}>
         {board.map((row, y) =>
           row.map((color, x) => (
@@ -230,12 +265,14 @@ const Home = () => {
                   className={styles.cell}
                   key={`cell-${x}-${y}`}
                   onClick={() => clickcell(x, y)}
+                  onContextMenu={(event) => handleRightClick(x, y, event)} //右クリック
                 />
               ) : (
                 <div
                   className={styles.hoge}
                   key={`hoge-${x}-${y}`}
                   onClick={() => clickcell(x, y)}
+                  onContextMenu={(event) => handleRightClick(x, y, event)} //右クリック
                   style={{
                     backgroundPosition: 30 * (1 - board[y][x]),
                   }}
