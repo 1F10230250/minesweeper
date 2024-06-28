@@ -44,26 +44,42 @@
 
 .bomb {
   display: flex;
-  margin-right: auto;
+  align-items: center;
+  justify-content: center;
+  color: red;
   position: absolute;
+  width: 50px;
+  height: 30px;
   top: 9%;
   right: 65%;
   transform: translate(-50%, -50%);
-  background-color: #808080;
+  background-color: black;
   border-top: 5px solid #404040;
   border-left: 5px solid #404040;
   border-right: 5px solid white;
   border-bottom: 5px solid white;
 }
 
+.bombnum {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
 .timer {
   display: flex;
-  margin-right: auto;
+  align-items: center;
+  justify-content: center;
+  color: red;
   position: absolute;
+  width: 50px;
+  height: 30px;
   top: 9%;
   left: 75%;
   transform: translate(-50%, -50%);
-  background-color: #808080;
+  background-color: black;
   border-top: 5px solid #404040;
   border-left: 5px solid #404040;
   border-right: 5px solid white;
@@ -85,6 +101,18 @@
   height: 270px;
   width: 270px;
   background-color: #808080;
+}
+
+.sign {
+  height: 30px;
+  width: 30px;
+  border-top: 5px solid white;
+  border-left: 5px solid white;
+  border-right: 5px solid #404040;
+  border-bottom: 5px solid #404040;
+  background-image: url('~/assets/images/icons.png'); /* 背景画像を指定 */
+  background-repeat: no-repeat; /* 背景画像を繰り返さない */
+  background-size: cover;
 }
 
 .cell {

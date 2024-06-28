@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './index.module.css';
 const Home = () => {
   // const directions = [
@@ -13,8 +13,8 @@ const Home = () => {
   // ];
   //0 なし
   //1 左クリック
-  //2 旗
-  //3 はてな
+  //2 はてな
+  //3 旗
   const [userInputs, setUserInputs] = useState<(0 | 1 | 2 | 3)[][]>([
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -40,6 +40,36 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
+
+  const [time, setTime] = useState(0);
+  const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (userInputs.some((row) => row.some((input) => input !== 0))) {
+      if (!timerId) {
+        const id = setInterval(() => {
+          setTime((prevTime) => prevTime + 1);
+        }, 1000);
+        setTimerId(id);
+      }
+    } else {
+      setTime(0);
+    }
+
+    return () => {
+      if (timerId) {
+        clearInterval(timerId);
+        setTimerId(null);
+      }
+    };
+  }, [userInputs, timerId]);
+
+  const stopTimer = () => {
+    if (timerId) {
+      clearInterval(timerId);
+      setTimerId(null);
+    }
+  };
 
   const isPlaying = userInputs.some((row) => row.some((input) => input !== 0));
   // const isFailure = userInputs.some((row, y) =>
@@ -87,8 +117,11 @@ const Home = () => {
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
     ]);
+    setTime(0);
+    stopTimer();
   };
-  let allBomb = false;
+  let allBomb = 0;
+  let findBomb = 0;
   const newUserInputs: (0 | 1 | 2 | 3)[][] = JSON.parse(JSON.stringify(userInputs));
   const chain = (y: number, x: number) => {
     for (let y_i = -1; y_i <= 1; y_i++) {
@@ -108,9 +141,9 @@ const Home = () => {
     }
   };
   const clickcell = (x: number, y: number) => {
-    if (allBomb === false) {
+    if (allBomb === 0) {
       const newUserInputs: (0 | 1 | 2 | 3)[][] = JSON.parse(JSON.stringify(userInputs));
-      if (userInputs[y][x] === 0) {
+      if (userInputs[y][x] === 0 || userInputs[y][x] === 2 || userInputs[y][x] === 3) {
         newUserInputs[y][x] = 1;
       }
       setUserInputs(newUserInputs);
@@ -158,6 +191,7 @@ const Home = () => {
   //     }
   //   }
   // }
+  //ゲームオーバー
   for (let yaa = 0; yaa <= 8; yaa += 1) {
     for (let xaa = 0; xaa <= 8; xaa += 1) {
       let bombNumber = 0;
@@ -167,6 +201,8 @@ const Home = () => {
             for (let x_aa = 0; x_aa <= 8; x_aa += 1) {
               if (bombMap[y_aa][x_aa] === 1) {
                 board[y_aa][x_aa] = 11;
+                allBomb = 2;
+                stopTimer();
               }
             }
           }
@@ -200,16 +236,21 @@ const Home = () => {
     }
   }
 
-  let findBomb = 0;
+  let findBlock = 0;
   for (let yb = 0; yb <= 8; yb += 1) {
     for (let xb = 0; xb <= 8; xb += 1) {
       if (userInputs[yb][xb] === 1) {
+        findBlock += 1;
+      }
+      //旗カウント
+      if (userInputs[yb][xb] === 3) {
         findBomb += 1;
       }
     }
   }
-  if (findBomb === 71) {
-    allBomb = true;
+  if (findBlock === 71) {
+    allBomb = 1;
+    stopTimer();
   }
 
   const handleRightClick = (x: number, y: number, event: React.MouseEvent) => {
@@ -233,7 +274,7 @@ const Home = () => {
         board[y][x] = 9;
       } else if (userInputs[y][x] === 3) {
         board[y][x] = 10;
-      } else if (userInputs[y][x] === 0) {
+      } else if (userInputs[y][x] === 0 && bombMap[y][x] === 0) {
         board[y][x] = -1;
       }
     }
@@ -246,15 +287,17 @@ const Home = () => {
   return (
     <div className={styles.container}>
       <div className={styles.option}>
-        <div className={styles.bomb}>aaa</div>
+        <div className={styles.bomb}>
+          <div className={styles.bombnum}>{10 - findBomb}</div>
+        </div>
         <button
           className={styles['reset-button']}
           onClick={resetGame}
           style={{
-            backgroundPosition: allBomb === true ? -360 : -330,
+            backgroundPosition: allBomb === 1 ? -360 : allBomb === 0 ? -330 : -390,
           }}
         />
-        <div className={styles.timer}>aaa</div>
+        <div className={styles.timer}>{time}</div>
       </div>
       <div className={styles.board}>
         {board.map((row, y) =>
@@ -266,6 +309,26 @@ const Home = () => {
                   key={`cell-${x}-${y}`}
                   onClick={() => clickcell(x, y)}
                   onContextMenu={(event) => handleRightClick(x, y, event)} //右クリック
+                />
+              ) : board[y][x] === 9 ? (
+                <div
+                  className={styles.sign}
+                  key={`cell-${x}-${y}`}
+                  onClick={() => clickcell(x, y)}
+                  onContextMenu={(event) => handleRightClick(x, y, event)} //右クリック
+                  style={{
+                    backgroundPosition: -165,
+                  }}
+                />
+              ) : board[y][x] === 10 ? (
+                <div
+                  className={styles.sign}
+                  key={`cell-${x}-${y}`}
+                  onClick={() => clickcell(x, y)}
+                  onContextMenu={(event) => handleRightClick(x, y, event)} //右クリック
+                  style={{
+                    backgroundPosition: -185,
+                  }}
                 />
               ) : (
                 <div
